@@ -1,0 +1,130 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:math' hide log;
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:insecure/core/class/handlingdataview.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import '../../../core/class/download_app.dart';
+import '../../../core/class/statusrequest.dart';
+import '../../../core/constant/color.dart';
+import '../../../core/constant/icon_broken.dart';
+import '../../../core/constant/routes.dart';
+import '../../../core/functions/handlingdatacontroller.dart';
+import '../../../core/functions/translatedordatabase.dart';
+import '../../../core/functions/validinput.dart';
+import '../../../core/services/services.dart';
+import '../../../view/widget/auth/customtextformauth.dart';
+import '../data/data_source/auth/login.dart';
+import '../data/model/student_model.dart';
+
+abstract class LoginController extends GetxController {
+  login();
+}
+
+class LoginControllerImp extends LoginController {
+  LoginData loginData = LoginData(Get.find());
+  Map user = {};
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
+  final GlobalKey<FormState> formState2 =
+      GlobalKey<FormState>(); // Key for the second form
+
+  late TextEditingController email;
+  late TextEditingController password;
+  StatusRequest statusRequest = StatusRequest.none;
+  StatusRequest statusRequestCode = StatusRequest.none;
+  StatusRequest statusRequestLink = StatusRequest.none;
+
+  bool isShowPassword = true;
+  bool isRemember = false;
+  MyServices myServices = Get.find();
+  late String token;
+  late String cohortId;
+  late String idNumber;
+  late String nameCohorts;
+  late String userID;
+  late String codeSTD;
+  late String nameSTD;
+  late String emailSTD;
+  late String studentPhone;
+  late String imageUrl;
+
+  showPassword() {
+    isShowPassword = isShowPassword == true ? false : true;
+    update();
+  }
+
+  String? selectedValue = "Student";
+
+  final List<String> options = [
+    'Student',
+    'Doctor',
+    'Guardian',
+  ];
+  final nationalIdController = TextEditingController();
+  String? nationalIdCode;
+  String? nameCode;
+
+  @override
+  login() async {
+    if (formState.currentState!.validate()) {
+      statusRequest = StatusRequest.loading;
+      update();
+      await loginData.getToken(email.text.trim(), password.text.trim()).then(
+        (value) async {
+          statusRequest = handlingData(value);
+        },
+      );
+
+      // myServices.sharedPreferences.setString("step", "2");
+    }
+    update();
+  }
+
+  @override
+  void onInit() async {
+    email = TextEditingController();
+    password = TextEditingController();
+
+//  await FirebaseMessaging.instance.subscribeToTopic("general");
+    getAccessToken();
+    super.onInit();
+  }
+
+  Future<String?> getAccessToken() async {
+    final serviceAccountJson = {
+      "type": "service_account",
+      "project_id": "oi-tawasol",
+      "private_key_id": "3bb33ad53cc58f4e6a2d921f919403b9116029b2",
+      "private_key":
+          "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCuRTF/Q3eIFYOb\npFwWtSKVBj3AkKQoSRSbfhzYUDkjOrCGpaJxOQKjnQdJw5EYbnk9WaeZQCWr8oox\njoc8JUA/1r50CZTIE91KE+2p/wq6DV+YdbJqLImxWOmUqgN7jSojg8R0oMI5nMtC\nW6upIJuwJdOJJhjeSlgdxD+nVOU9LmHKsmp6nfUy/XYZqcclWrcN6N1U5Jx4ULkV\nvGcP/X/YPzlV4jBXtUOB9QS6OBAp+cq7mHpOuDZYBw6bdUdMa8U72lMMGcI71ZdF\nWOI/pI+NSBJvDgOj1OthWvaRtCdz6H7lDAfyyyb/Vi/5/DxXdIhtHW38lUhcVRxV\n/FqxMS8nAgMBAAECggEAPTjauDJL+ldQimu13FZbJU5xgEZwHST7Y9rsqEOapxk1\nrb/frvYPysneJxhYz2P0HMzz159U/LCywtEnCkat6R94fgxlo9pyqdURb+DE9HLB\nTC7A9JLb9p1dRdhqa8u+a4adjDlzski2kYPh7QMjHsFTLMHhB6rHhQGOOStWc2TU\ngrI8eL23Fh6UOhRjr++gXN2GzfLwxAJNBuLSA0C0CZupWlugHVyN5tJMws2qHXWj\n+lQhKxHNkRPlHw5si6MTCASU/DlHMemOsmnAYG9nu981ki34oqFWNYfG3CZ46Ma4\nI7bmN3M2Qu2OlmzTWWG31hy1qVNRYHxf3LGzt6pM6QKBgQDmujLzT4GlxjjVVANu\nSRNvKGyABGVhvvVF/uqt7y+bHVAxWCBr8JnXjho0Wd2kE0LK6WA4spGIug5MuTGs\n+v8dj7pA9twPVU+8nYq1DYIkgMg0cOYak2z4GSJd6sGcCMIZHi3gcHHx889xgP0+\neLv4U7cvPk1ULGft4vF5H074KQKBgQDBW+NXOTrP0ZPLdNif5YgVxZBtTzt0zK5y\njxRLT06xj/TO2aAurdP+0fpuHbCLwSUph3cLtUIeWWDpvws9NM13hSsYXKI3VnBo\n5vITqhQM6WLV/QEt3idZrG/8uBQHbrCi6nFdt2G2AKMhf9L6tbrP5Ce7CZc94Y0H\n68ioK0sWzwKBgQCkm4rmE38Hahf5+mpIMFJxJ4HhA0HhLn+GZIvBc7efDpa73Yej\n+o+HPZZsawC5ohQw97byPFOgHD0/d5B9PMTtrjDPUE9HkTHF+w+OhAipSkeLQlCn\n/S3tAuGF54ohbA4uJV3Nlet1FuCUtdX2z+QrEm7KgcRhnRy4lwR3yWJpoQKBgGlE\n/aCfJ8W89Bnwo39qF4zC4r6gRF5ykQcNnp7hrpY9Kar0EKFZQfGZoB4TS+rKXNEf\nT1Cwfi7HuluIBzZraPGJLs00oZw/EzQJiAHstr3Q0l5uQBYYvJO1rcKI9V6WhNQt\nj0rWa/wKnMXAMb0M84f7TyYlMpIeGgoV9EiaSWdBAoGADBZh77/nwkz6HvAMGJLm\nn8QrjLHNz7shmvcpeqNYipVmsqn9yC6aGpdRT7DE4fdAWAAXxaCyvC8X0c33G7iP\ndsgJdZSawbkfuBfxt/EvZuQnMkNfyVaMxlkOM1XpGhEWyRM+Hl8QzQmsZ3x850x7\n6BERr+kY0MsJ6I4i8ndRVH8=\n-----END PRIVATE KEY-----\n",
+      "client_email":
+          "firebase-adminsdk-rwbtv@oi-tawasol.iam.gserviceaccount.com",
+      "client_id": "103261302360031868448",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url":
+          "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url":
+          "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-rwbtv%40oi-tawasol.iam.gserviceaccount.com",
+      "universe_domain": "googleapis.com"
+    };
+    List<String> scopes = [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/firebase.database",
+      "https://www.googleapis.com/auth/firebase.messaging"
+    ];
+    return null;
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+}
