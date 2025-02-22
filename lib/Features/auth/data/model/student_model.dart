@@ -1,102 +1,83 @@
-class StudentModel {
-  String? studentId;
-  String? studentEmail;
-  String? studentName;
-  String? studentPhoto;
-  String? studentPhone;
-  String? studentDepartment;
-  String? studentBand;
-  String? studentLab;
-  String? chortsId;
-  String? sessionId;
-  String? token;
+import 'dart:convert';
 
-  StudentModel({
-    this.studentId,
-    this.studentEmail,
-    this.studentName,
-    this.studentPhoto,
-    this.studentPhone,
-    this.studentDepartment,
-    this.studentBand,
-    this.studentLab,
-    this.chortsId,
-    this.sessionId,
-    this.token,
+class UserModel {
+  final int userId;
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+  final String createAt;
+  final int userApprove;
+  final int studentCode;
+  final String name;
+  final String image;
+  final int majorId;
+  final int bandId;
+  final String bandName;
+  final int id;
+  final String majorName;
+  final String approveName;
+
+  UserModel({
+    required this.userId,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.createAt,
+    required this.userApprove,
+    required this.studentCode,
+    required this.name,
+    required this.image,
+    required this.majorId,
+    required this.bandId,
+    required this.bandName,
+    required this.id,
+    required this.majorName,
+    required this.approveName,
   });
 
-  // Factory method to parse from JSON
-  factory StudentModel.fromJson(Map<String, dynamic> json) {
-    return StudentModel(
-      studentId: json['studentId'],
-      studentEmail: json['studentEmail'],
-      studentName: json['studentName'],
-      studentPhoto: json['studentPhoto'],
-      studentPhone: json['studentPhone'],
-      studentDepartment: json['studentDepartment'],
-      studentBand: json['studentBand'],
-      studentLab: json['studentLab'],
-      chortsId: json['chortsId'],
-      sessionId: json['sessionId'],
-      token: json['token'],
+  // تحويل من JSON إلى Object
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      userId: json["user_id"] ?? 0,
+      username: json["username"] ?? "",
+      email: json["email"] ?? "",
+      phone: json["phone"] ?? "",
+      password: json["password"] ?? "",
+      createAt: json["createAt"] ?? "",
+      userApprove: json["user_approve"] ?? 0,
+      studentCode: json["student_code"] ?? 0,
+      name: json["name"] ?? "",
+      image: json["image"] ?? "",
+      majorId: json["major_id"] ?? 0,
+      bandId: json["band_id"] ?? 0,
+      bandName: json["band_name"] ?? "",
+      id: json["id"] ?? 0,
+      majorName: json["major_name"] ?? "",
+      approveName: json["approve_name"] ?? "",
     );
   }
-}
 
-
-class AdminModel {
-  String? adminUserName;
-  String? adminPublisherName;
-  String? publisherImage;
-  String? adminPassword;
-  String? adminPermission;
-  String? adminDepartment;
-  String? departmentName;
-  String? sessionId;
-  String? username;
-  String? postPermission;
-  String? token;
-
-  AdminModel(
-      {this.adminUserName,
-        this.adminPublisherName,
-        this.publisherImage,
-        this.adminPassword,
-        this.adminPermission,
-        this.adminDepartment,
-        this.departmentName,
-        this.sessionId,
-        this.username,
-        this.postPermission,
-        this.token});
-
-  AdminModel.fromJson(Map<String, dynamic> json) {
-    adminUserName = json['adminUserName'];
-    adminPublisherName = json['adminPublisherName'];
-    publisherImage = json['publisherImage'];
-    adminPassword = json['adminPassword'];
-    adminPermission = json['adminPermission'];
-    adminDepartment = json['adminDepartment'];
-    departmentName = json['departmentName'];
-    sessionId = json['sessionId'];
-    username = json['username'];
-    postPermission = json['post_permission'];
-    token = json['token'];
-  }
-
+  // تحويل من Object إلى JSON
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['adminUserName'] = adminUserName;
-    data['adminPublisherName'] = adminPublisherName;
-    data['publisherImage'] = publisherImage;
-    data['adminPassword'] = adminPassword;
-    data['adminPermission'] = adminPermission;
-    data['adminDepartment'] = adminDepartment;
-    data['departmentName'] = departmentName;
-    data['sessionId'] = sessionId;
-    data['username'] = username;
-    data['post_permission'] = postPermission;
-    data['token'] = token;
-    return data;
+    return {
+      "user_id": userId,
+      "username": username,
+      "email": email,
+      "phone": phone,
+      "password": password,
+      "createAt": createAt,
+      "user_approve": userApprove,
+      "student_code": studentCode,
+      "name": name,
+      "image": image,
+      "major_id": majorId,
+      "band_id": bandId,
+      "band_name": bandName,
+      "id": id,
+      "major_name": majorName,
+      "approve_name": approveName,
+    };
   }
 }

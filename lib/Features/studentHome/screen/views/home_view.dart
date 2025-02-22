@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_downloader/flutter_media_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:insecure/Features/studentHome/controller/complaint_controller.dart';
 import 'package:insecure/Features/studentHome/data/model/posts_model.dart';
 import 'package:insecure/core/constant/icon_broken.dart';
 import '../../../../core/constant/apptheme.dart';

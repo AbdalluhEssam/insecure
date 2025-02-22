@@ -1,13 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:insecure/core/helper/spacing.dart';
 import '../../../../core/constant/color.dart';
-import '../../../../core/functions/alertextiapp.dart';
 import '../../controller/homescreen_controller.dart';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,10 +14,171 @@ class HomeScreen extends StatelessWidget {
       init: HomeScreenControllerImp(),
       builder: (controller) {
         return Scaffold(
+          key: controller.scaffoldKey,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             toolbarHeight: 0,
+          ),
+          drawer: Drawer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // قسم الحساب
+                Container(
+                  color: AppColor.primaryColor,
+                  padding: const EdgeInsets.only(top: 50, bottom: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: CachedNetworkImageProvider(
+                            controller.userModel.image),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        controller.userModel.name,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "${controller.userModel.bandName == "دكتور" ? "Doctor" : controller.userModel.studentCode} - ${controller.userModel.majorName} ${controller.userModel.bandName == "دكتور" ? "" : "-"} ${controller.userModel.bandName == "دكتور" ? "" : controller.userModel.bandName}",
+                        style:
+                            const TextStyle(fontSize: 13, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                verticalSpace(16),
+                // قسم الإشعارات
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.notifications, color: Colors.black),
+                          SizedBox(width: 10),
+                          Text(
+                            "Notification",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ListTile(
+                        // visualDensity: VisualDensity.comfortable,
+                        contentPadding: EdgeInsetsDirectional.only(
+                          start: 16,
+                          end: 0,
+                          top: 0,
+                          bottom: 0,
+                        ),
+                        title: const Text("Notification"),
+                        trailing: Transform.scale(
+                          scale: 0.7, // يمكنك تغيير القيمة لتحديد الحجم المناسب
+                          child: Switch(
+                            materialTapTargetSize: MaterialTapTargetSize
+                                .shrinkWrap, // يقلل المساحة المحيطة
+                            activeTrackColor: AppColor.primaryColor,
+                            activeColor: Colors.white,
+                            value: controller.isNotificationEnabled,
+                            onChanged: (value) =>
+                                controller.toggleNotification(value),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsetsDirectional.only(
+                          start: 16,
+                          end: 0,
+                          top: 0,
+                          bottom: 0,
+                        ),
+                        title: const Text("Updates"),
+                        trailing: Transform.scale(
+                            scale:
+                                0.7, // يمكنك تغيير القيمة لتحديد الحجم المناسب
+                            child: Switch(
+                              materialTapTargetSize: MaterialTapTargetSize
+                                  .shrinkWrap, // يقلل المساحة المحيطة
+                              activeTrackColor: AppColor.primaryColor,
+                              activeColor: Colors.white,
+                              value: controller.isUpdatesEnabled,
+                              onChanged: (value) =>
+                                  controller.toggleUpdates(value),
+                            )),
+                      ),
+                      const Divider(),
+                    ],
+                  ),
+                ),
+
+                // قسم الإعدادات واللغة
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.settings, color: Colors.black),
+                          SizedBox(width: 10),
+                          Text(
+                            "Other",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ListTile(
+                        title: const Text("Language"),
+                        trailing: const Text(
+                          "English",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        // onTap: () => controller.changeLanguage(),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Spacer(),
+
+                // زر تسجيل الخروج
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: InkWell(
+                    onTap: () => controller.logout(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          "Log Out",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        horizontalSpace(16),
+                        const Icon(Icons.logout, color: Colors.red)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           body: SafeArea(
             child: Padding(
@@ -34,6 +191,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 15),
                   // القائمة
                   Expanded(child: _buildMenuList(controller)),
+                  const SizedBox(height: 15),
                 ],
               ),
             ),
@@ -58,24 +216,29 @@ class HomeScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(controller.profileImage),
+            backgroundImage:
+                CachedNetworkImageProvider(controller.userModel.image),
           ),
-          const SizedBox(width: 12),
+          horizontalSpace(15),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                controller.userName,
+                controller.userModel.name,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                controller.userRole,
+                "${controller.userModel.bandName == "دكتور" ? "Doctor" : controller.userModel.studentCode} - ${controller.userModel.majorName} ${controller.userModel.bandName == "دكتور" ? "" : "-"} ${controller.userModel.bandName == "دكتور" ? "" : controller.userModel.bandName}",
                 style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
           ),
           Spacer(),
-          Icon(Icons.menu, color: Colors.black),
+          IconButton(
+              onPressed: () {
+                controller.scaffoldKey.currentState!.openDrawer();
+              },
+              icon: Icon(Icons.menu, color: Colors.black)),
         ],
       ),
     );
@@ -86,7 +249,10 @@ class HomeScreen extends StatelessWidget {
     return ListView.builder(
       itemCount: controller.menuItems.length,
       itemBuilder: (context, index) {
-        final item = controller.menuItems[index];
+        final item = controller.userModel.approveName == "دكتور"
+            ? controller.doctorItems[index]
+            : controller.menuItems[index];
+
         return GestureDetector(
           onTap: () {},
           child: Container(

@@ -34,30 +34,32 @@ class Login extends StatelessWidget {
           child: GetBuilder<LoginControllerImp>(
             builder: (controller) => HandlingDataRequest(
               statusRequest: controller.statusRequest,
-              widget: Form(
-                key: controller.formState,
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(30.0.r),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(AppImageAssets.logoApp),
-                          horizontalSpace(15),
-                          Text(
-                            "Insecure",
-                            style: AppFonts.font24BlackBold,
-                          )
-                        ],
-                      ),
-                      verticalSpace(10),
-                      Expanded(
-                        child: Container(
+              widget: SingleChildScrollView(
+                child: Form(
+                  key: controller.formState,
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(30.0.r),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(AppImageAssets.logoApp),
+                            horizontalSpace(15),
+                            Text(
+                              "Insecure",
+                              style: AppFonts.font24BlackBold,
+                            )
+                          ],
+                        ),
+                        verticalSpace(30),
+                        Container(
                           width: context.width,
+                          height: context.height * 0.7,
                           margin: EdgeInsets.symmetric(vertical: 20.h),
                           padding: EdgeInsets.all(24.r),
                           alignment: Alignment.center,
@@ -120,6 +122,8 @@ class Login extends StatelessWidget {
                                 ),
                               ),
                               CheckboxListTile(
+                                checkColor: AppColor.white,
+                                activeColor: AppColor.primaryColor,
                                 value: controller.isRemember,
                                 onChanged: (value) {
                                   controller.isRemember = value!;
@@ -136,65 +140,11 @@ class Login extends StatelessWidget {
                                 controlAffinity: ListTileControlAffinity
                                     .leading, // Place checkbox on the left
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 20.h),
-                                decoration: const BoxDecoration(
-                                    color: AppColor.white,
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        topLeft: Radius.circular(30))),
-                                child: DropdownButton<String>(
-                                  value: controller.selectedValue,
-                                  hint: const Text(
-                                    "Select your role",
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  isExpanded: true,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.w),
-                                  underline: Container(
-                                    width: Get.width,
-                                    height: 1.h,
-                                    decoration: const BoxDecoration(
-                                      color: AppColor.primaryColor,
-                                    ),
-                                  ),
-                                  dropdownColor: AppColor.white,
-                                  items: controller.options.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(
-                                            color: AppColor.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.spMin),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    controller.selectedValue = newValue;
-                                    log(controller.selectedValue.toString());
-                                    controller.update();
-                                  },
-                                ),
-                              ),
                               verticalSpace(16),
                               CustomButtonAuth(
                                 text: "Login",
                                 onPressed: () async {
-                                  Get.offAllNamed(AppRoute.homeScreen);
-                                  // controller.myServices.sharedPreferences
-                                  //     .setString("step", "2");
-                                  // if (controller.selectedValue == "Doctor") {
-                                  //   await controller.loginInAdmin();
-                                  // } else {
-                                  //   await controller.login();
-                                  // }
+                                  await controller.login();
                                 },
                               ),
                               verticalSpace(8),
@@ -211,8 +161,6 @@ class Login extends StatelessWidget {
                                   horizontalSpace(8),
                                   GestureDetector(
                                     onTap: () {
-                                      controller.selectedValue =
-                                          "Teaching Member";
                                       controller.update();
                                     },
                                     child: Text(
@@ -230,8 +178,8 @@ class Login extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

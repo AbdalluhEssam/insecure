@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -7,7 +6,6 @@ import 'package:insecure/core/constant/imageassets.dart';
 import 'package:insecure/core/constant/routes.dart';
 import '../../core/functions/checkinterner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
@@ -50,7 +48,7 @@ class _SplashScreenState extends State<MySplashScreen>
     // الانتقال بعد 3 ثواني
     Future.delayed(const Duration(seconds: 3), () async {
       if (isOnline) {
-        Get.offAllNamed(AppRoute.onBoarding); // اسم الروت الصحيح
+        Get.offAllNamed(AppRoute.homeScreen); // اسم الروت الصحيح
       }
     });
   }

@@ -87,7 +87,7 @@ class _OnBoardingScreenState extends State<OnBoarding> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_currentPage == onboardingData.length - 1) {
-                    // myServices.sharedPreferences.setString("step", "1");
+                    myServices.sharedPreferences.setString("step", "1");
 
                     Get.offAllNamed(AppRoute.login);
                   } else {
