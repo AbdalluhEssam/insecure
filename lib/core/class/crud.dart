@@ -48,8 +48,6 @@ class Crud {
     }
   }
 
- 
-
   Future<Either<StatusRequest, dynamic>> getData(String linkUrl, Map data,
       {Map<String, String>? headers}) async {
     try {
@@ -87,28 +85,31 @@ class Crud {
     }
   }
 
-
-
-  postRequestWithFiles(String url, Map data, File file, String filename) async {
-    Map<String, String> headers = {"apikey": "K83400380388957"};
-
+  postRequestWithFiles(
+      String url, Map data, File? file, String filename) async {
     var request = http.MultipartRequest("POST", Uri.parse(url));
-    var length = await file.length();
-    var stream = http.ByteStream(file.openRead());
-    var multipartFile = http.MultipartFile(filename, stream, length,
-        filename: basename(file.path));
-    request.files.add(multipartFile);
-    request.headers.addAll(headers);
+
+    // إضافة البيانات العادية
     data.forEach((key, value) {
       request.fields[key] = value;
     });
-    var myRequest = await request.send();
 
+    // التحقق مما إذا كان هناك ملف قبل إضافته
+    if (file != null) {
+      var length = await file.length();
+      var stream = http.ByteStream(file.openRead());
+      var multipartFile = http.MultipartFile(filename, stream, length,
+          filename: basename(file.path));
+      request.files.add(multipartFile);
+    }
+
+    var myRequest = await request.send();
     var response = await http.Response.fromStream(myRequest);
+
     if (myRequest.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      log("Error${myRequest.statusCode}");
+      log("Error ${myRequest.statusCode}");
     }
   }
 

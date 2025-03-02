@@ -1,5 +1,4 @@
 import '../../../../../core/class/crud.dart';
-import '../../../../../likeapi.dart';
 
 class HomeData {
   Crud crud;

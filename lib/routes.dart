@@ -1,6 +1,7 @@
-
 import 'package:get/get.dart';
 import 'package:insecure/Features/auth/screen/views/login.dart';
+import 'package:insecure/Features/studentHome/screen/views/complaint_screen.dart';
+import 'package:insecure/Features/studentHome/screen/views/complaint_status.dart';
 import 'package:insecure/Features/studentHome/screen/views/home_screen.dart';
 import 'package:insecure/view/screen/language.dart';
 import 'package:insecure/view/screen/munesetting/aboutus.dart';
@@ -23,5 +24,8 @@ List<GetPage<dynamic>>? routes = [
 
   GetPage(name: AppRoute.mySplashScreen, page: () => const MySplashScreen()),
   GetPage(name: AppRoute.homeScreen, page: () => const HomeScreen()),
-
+  GetPage(name: AppRoute.complaintScreen, page: () => const ComplaintScreen()),
+  GetPage(
+      name: AppRoute.complaintStatus,
+      page: () => const ComplaintStatusScreen()),
 ];

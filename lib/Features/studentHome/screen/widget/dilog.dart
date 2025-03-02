@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constant/color.dart';
 
 class ShowAlert extends StatelessWidget {
-  const ShowAlert(
-      {super.key, this.title, this.text, this.iconData, this.onPressed});
+  const ShowAlert({
+    super.key,
+    this.title,
+    this.text,
+    this.iconData,
+    this.onPressed,
+  });
 
   final String? title;
   final String? text;
@@ -13,28 +17,40 @@ class ShowAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title ?? 'تم تسجيل مشكلتك'),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(
+        title ?? 'Complaint Submitted',
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      ),
       icon: CircleAvatar(
-        radius: 30,
-        backgroundColor: AppColor.green,
-        child: Icon(iconData ?? Icons.done_outline_sharp,
-            size: 35, color: AppColor.white),
+        radius: 35,
+        backgroundColor: Colors.green.shade600,
+        child: Icon(
+          iconData ?? Icons.check_circle_outline,
+          size: 40,
+          color: Colors.white,
+        ),
       ),
       content: Text(
-          text ?? 'تم تسجيل مشكلتك بنجاح، سيتم الرد عليك في اقرب وقت ممكن'),
-      actionsAlignment:
-          title != null ? MainAxisAlignment.end : MainAxisAlignment.center,
+        text ??
+            'Your complaint has been submitted successfully. You will receive a response soon.',
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 16),
+      ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton.icon(
-            onPressed: onPressed ??
-                () {
-                  Navigator.pop(context);
-                },
-            icon: const Icon(Icons.close),
-            label: const Text('اغلاق',
-                style: TextStyle(
-                    color: AppColor.primaryColor,
-                    fontWeight: FontWeight.bold))),
+          onPressed: onPressed ?? () => Navigator.pop(context),
+          icon: const Icon(Icons.close, size: 20),
+          label: const Text(
+            'Close',
+            style: TextStyle(
+              color: Colors.blueAccent,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -46,22 +62,34 @@ class ShowAlertError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('حدث خطأ'),
-      icon: const CircleAvatar(
-        radius: 30,
-        backgroundColor: AppColor.primaryColor,
-        child: Icon(Icons.error_outline, size: 35, color: AppColor.white),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text(
+        'Error Occurred',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
-      content: const Text('حاول مره اخره'),
+      icon: const CircleAvatar(
+        radius: 35,
+        backgroundColor: Colors.redAccent,
+        child: Icon(Icons.error_outline, size: 40, color: Colors.white),
+      ),
+      content: const Text(
+        'Something went wrong. Please try again later.',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16),
+      ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('اغلاق',
-                style: TextStyle(
-                    color: AppColor.primaryColor,
-                    fontWeight: FontWeight.bold))),
+          onPressed: () => Navigator.pop(context),
+          child: const Text(
+            'Close',
+            style: TextStyle(
+              color: Colors.redAccent,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }

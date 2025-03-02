@@ -254,7 +254,11 @@ class HomeScreen extends StatelessWidget {
             : controller.menuItems[index];
 
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            if (item["route"] != null) {
+              Get.toNamed(item["route"]!);
+            }
+          },
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(

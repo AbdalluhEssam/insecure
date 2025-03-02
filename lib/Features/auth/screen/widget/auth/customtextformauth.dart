@@ -10,6 +10,7 @@ class CustomFormAuth extends StatelessWidget {
   final String? Function(String?) valid;
   final bool isNamber;
   final bool? obscureText;
+  final int? maxLines;
   final void Function()? onTap;
   final void Function()? onTapFull;
   final String? Function(String)? onChanged;
@@ -29,6 +30,7 @@ class CustomFormAuth extends StatelessWidget {
     this.onTapFull,
     this.color,
     this.onChanged,
+    this.maxLines,
   });
 
   @override
@@ -38,9 +40,14 @@ class CustomFormAuth extends StatelessWidget {
       children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(label)),
+            child: Text(label,
+                style: const TextStyle(
+                    color: AppColor.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold))),
         TextFormField(
           onTap: onTapFull,
+          maxLines: maxLines ?? 1,
           style: const TextStyle(color: AppColor.primaryColor),
           keyboardType: isNamber
               ? const TextInputType.numberWithOptions(decimal: true)

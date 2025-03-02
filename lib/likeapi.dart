@@ -5,6 +5,8 @@ class AppLink {
   static const String imageStatic = "$serverLinkOI/upload";
 //================================== Auth ===============================//
   static const String login = "$serverLinkOI/auth/login.php";
+  static const String complaintAddNew = "$serverLinkOI/complaint/add.php";
+  static const String complaintView = "$serverLinkOI/complaint/view.php";
 
 //================================== END ===============================//
 }

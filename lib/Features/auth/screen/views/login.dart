@@ -1,11 +1,9 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 import 'package:insecure/core/constant/icon_broken.dart';
 import 'package:insecure/core/constant/imageassets.dart';
-import 'package:insecure/core/constant/routes.dart';
 import 'package:insecure/core/helper/spacing.dart';
 import 'package:insecure/core/theming/styles.dart';
 import '../../controller/login_controller.dart';

@@ -4,9 +4,11 @@ import 'package:insecure/insecure_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await GetStorage.init(); 
+  // await GetStorage.init();
 
   await initialServices();
 
   runApp(InsecureApp());
 }
+// 521240
+// Dr.Magdy  - 01060060023

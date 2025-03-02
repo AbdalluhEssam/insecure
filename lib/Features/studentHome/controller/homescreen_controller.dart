@@ -1,25 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:insecure/Features/auth/data/model/student_model.dart';
-import 'package:insecure/Features/studentHome/screen/views/complaint_screen.dart';
-import 'package:insecure/Features/studentHome/screen/views/home_view.dart';
 import 'package:insecure/core/constant/imageassets.dart';
 import 'package:insecure/core/constant/routes.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import '../../../core/class/download_app.dart';
 import '../../../core/class/statusrequest.dart';
-import '../../../core/constant/color.dart';
-import '../../../core/constant/icon_broken.dart';
-import '../../../core/functions/translatedordatabase.dart';
 import '../../../core/services/services.dart';
-import '../../settings/screen/views/profile_view.dart';
 
 abstract class HomeScreenController extends GetxController {}
 
@@ -45,12 +33,12 @@ class HomeScreenControllerImp extends HomeScreenController {
     {
       "title": "New complaint",
       "image": AppImageAssets.onBoardingImage1,
-      "route": "/newComplaint"
+      "route": AppRoute.complaintScreen
     },
     {
       "title": "Complaint status",
       "image": AppImageAssets.onBoardingImage2,
-      "route": "/complaintStatus"
+      "route": AppRoute.complaintScreen
     },
   ];
   final List<Map<String, String>> doctorItems = [

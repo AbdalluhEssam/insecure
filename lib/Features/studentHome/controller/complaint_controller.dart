@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:insecure/Features/auth/data/model/user_model.dart';
 import '../../../core/class/statusrequest.dart';
 import '../../../core/functions/handlingdatacontroller.dart';
 import '../../../core/services/services.dart';
@@ -9,7 +12,7 @@ import '../data/data_source/home_data.dart';
 import '../screen/widget/dilog.dart';
 
 abstract class ComplaintStudentController extends GetxController {
-  addData(BuildContext context);
+  addData();
 }
 
 class ComplaintStudentControllerImp extends ComplaintStudentController {
@@ -20,119 +23,100 @@ class ComplaintStudentControllerImp extends ComplaintStudentController {
 
   MyServices myServices = Get.find();
 
-  late String chortsId;
-  late String idUserID;
-  late String emailSTD;
-  late String nameSTD;
-  late String imageSTD;
-  late String phoneSTD;
-  late String codeSTD;
-  late String tokenSTD;
-  late String departmentSTD;
-  late String studentBand;
-  late bool isAdmin;
+  var subjectController = TextEditingController();
+  var contentController = TextEditingController();
+  var selectedComplaintType = "شكاوى تكنولوجيا".obs;
+  var selectedAuthority = "الموارد البشرية".obs;
+  var replyController = TextEditingController();
+  var selectedImage = Rx<File?>(null); // الآن يمكن أن تكون الصورة `null`
 
-  initData() {
-    chortsId = myServices.sharedPreferences.getString("chortsId") ?? "";
-    emailSTD = myServices.sharedPreferences.getString("studentEmail") ?? "";
-    nameSTD = myServices.sharedPreferences.getString("studentName") ?? "";
-    imageSTD = myServices.sharedPreferences.getString("studentPhoto") ?? "";
-    phoneSTD = myServices.sharedPreferences.getString("studentPhone") ?? "";
-    codeSTD = myServices.sharedPreferences.getString("code") ?? "";
-    tokenSTD = myServices.sharedPreferences.getString("tokenLogin") ?? "";
-    departmentSTD = myServices.sharedPreferences.getString("studentDepartment") ?? "";
-    studentBand = myServices.sharedPreferences.getString("studentBand") ?? "";
-    idUserID = myServices.sharedPreferences.getString("idUserID") ?? "";
-    isAdmin = myServices.sharedPreferences.getBool("isAdmin") ?? false;
+  final List<String> complaintTypes = [
+    "شكاوى تكنولوجيا",
+    "شكاوى تعلمية",
+    "شكاوى شخصية",
+    "شكاوى عامة"
+  ];
+  final List<String> authorities = [
+    "الموارد البشرية",
+    "اعضاء هيئة التدريس",
+    "اعضاء الهيئة المعاونة",
+    "العميد"
+  ];
 
-    log(tokenSTD.toString());
-    log("idUserID :$idUserID");
-  }
+  var selectedComplaintTypeIndex = 0.obs;
+  var selectedAuthorityIndex = 0.obs;
 
-  int typeSTD() {
-    if (codeSTD[0] == "2") {
-      return 2;
-    } else {
-      return 1;
+  void pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      selectedImage.value = File(pickedFile.path);
     }
-
   }
 
-  bool done = false;
+  void sendComplaint() {
+    Get.snackbar("نجاح", "تم إرسال الشكوى بنجاح");
+  }
+
+  late UserModel userModel;
+
+  Future<UserModel?> getUserData() async {
+    String? userData = myServices.sharedPreferences.getString("user");
+
+    userModel = UserModel.fromJson(jsonDecode(userData!));
+    return userModel;
+  }
 
   @override
-  addData(context) async {
+  addData() async {
     if (formState.currentState?.validate() == true) {
       statusRequest = StatusRequest.loading;
-      update(); // Update UI to show loading state
-      try {
-        // Generate complaint data
-        String currentDate = DateFormat.yMd().format(DateTime.now()).toString();
+      update(); // تحديث الواجهة لعرض حالة التحميل
 
-        // Send complaint data
+      try {
         var response = await homeData.addComplaintData(
-          codeSTD.toString(),
-          selectedCategory.toString(),
-          addressController.text,
-          detailsController.text,
-          currentDate.toString(),
-          typeSTD().toString(),
-          tokenSTD.toString(),
-          idUserID.toString(),
+          subjectController.text,
+          contentController.text,
+          selectedComplaintTypeIndex.value.toString(),
+          selectedAuthorityIndex.value.toString(),
+          userModel.userId.toString(),
+          selectedImage.value, // الآن يمكن أن يكون `null`
         );
 
-        log("===================response=================== ${response.toString()}");
+        log("=================== response =================== ${response.toString()}");
 
-        // Handling the response and checking the status
         statusRequest = handlingData(response);
 
         if (statusRequest == StatusRequest.success) {
           if (response['status'] == "success") {
             await Get.dialog(const ShowAlert());
+            subjectController.clear();
+            contentController.clear();
+            selectedImage.value = null; // إعادة تعيين الصورة بعد الإرسال
+            Get.back();
             update();
-            addressController.clear();
-            detailsController.clear();
-            // selectedCategory = '';
           }
-          // If successful, show success alert dialog
         } else {
           statusRequest = StatusRequest.none;
           await Get.dialog(const ShowAlertError());
           update();
-
           log("Request failed with status: $statusRequest");
         }
       } catch (e, stacktrace) {
-        // Log the error and stacktrace for debugging
-        log("------------------//onError///------------------  $e");
+        log("⚠️ خطأ أثناء إرسال البيانات: $e");
         log(stacktrace.toString());
       } finally {
-        // Ensure the UI is updated after the request completes
         statusRequest = StatusRequest.failure;
         update();
       }
     }
   }
 
-  Map<String, String> complaintTypes = {
-    "Education": "مشاكل تعليمية",
-    "Technical": "مشكلة تقنية",
-    "Students": "مشاكل طلابية",
-    "Public": "مشكلة عامة",
-  };
-
-
   @override
-  void onInit() async{
-
-    initData();
-    typeSTD();
-
+  void onInit() {
     statusRequest = StatusRequest.success;
+    getUserData();
+    log(userModel.userId.toString());
     super.onInit();
   }
-
-  String? selectedCategory;
-  TextEditingController addressController = TextEditingController();
-  TextEditingController detailsController = TextEditingController();
 }
