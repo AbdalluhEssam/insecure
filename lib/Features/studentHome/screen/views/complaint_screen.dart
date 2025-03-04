@@ -15,12 +15,18 @@ class ComplaintScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Add New Complaint",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        title: Text("Add New Complaint",
+            style: TextStyle(
+              color: AppColor.primaryColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColor.primaryColor,
           ),
+          onPressed: () => Get.back(),
         ),
         elevation: 0,
         backgroundColor: AppColor.backgroundColor,

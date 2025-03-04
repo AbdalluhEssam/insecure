@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:insecure/Features/auth/data/model/student_model.dart';
+import 'package:insecure/core/functions/handlingdatacontroller.dart';
 
 import '../../../core/class/statusrequest.dart';
-import '../../../core/constant/routes.dart';
 import '../../../core/services/services.dart';
 import '../data/data_source/home_data.dart';
 import '../data/model/complain_model.dart';
@@ -16,12 +17,12 @@ class ComplaintStatusController extends GetxController {
 
   MyServices myServices = Get.find();
 
-  var complaints = <ComplainModel>[].obs;
-  var isLoading = true.obs;
+  List<ComplainModel> complaints = [];
 
   @override
   void onInit() {
     getUserData();
+    log(userModel.userId.toString());
     fetchComplaints();
     super.onInit();
   }
@@ -36,16 +37,30 @@ class ComplaintStatusController extends GetxController {
   }
 
   void fetchComplaints() async {
+    complaints.clear();
     try {
-      isLoading(true);
-      var response = await homeData.getComplaints(userModel.userId);
-      if (statusRequest == StatusRequest.success) {
-        var data = json.decode(response.body) as List;
-        complaints.value =
-            data.map((json) => ComplainModel.fromJson(json)).toList();
+      statusRequest = StatusRequest.loading;
+      update(); // تحديث الواجهة لعرض حالة التحميل
+
+      var response = await homeData.getComplaints(userModel.userId.toString());
+
+      log("=================== response =================== ${response.toString()}");
+
+      statusRequest = handlingData(response);
+
+      if (statusRequest == StatusRequest.success &&
+          response['status'] == "success") {
+        statusRequest = StatusRequest.success;
+        List data = response['data'] as List;
+
+        complaints.addAll(data.map((e) => ComplainModel.fromJson(e)));
+
+        update();
       }
+    } catch (e) {
+      log("Error fetching complaints: $e");
     } finally {
-      isLoading(false);
+      update();
     }
   }
 }

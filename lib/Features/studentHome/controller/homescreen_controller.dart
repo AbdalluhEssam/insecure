@@ -38,19 +38,19 @@ class HomeScreenControllerImp extends HomeScreenController {
     {
       "title": "Complaint status",
       "image": AppImageAssets.onBoardingImage2,
-      "route": AppRoute.complaintScreen
+      "route": AppRoute.complaintStatus
     },
   ];
   final List<Map<String, String>> doctorItems = [
     {
       "title": "Browse the complaint",
       "image": AppImageAssets.onBoardingImage1,
-      "route": "/newComplaint"
+      "route": AppRoute.complaintScreen
     },
     {
       "title": "Check-out",
       "image": AppImageAssets.onBoardingImage2,
-      "route": "/complaintStatus"
+      "route": AppRoute.complaintStatus
     },
   ];
 

@@ -30,9 +30,9 @@ class HomeData {
     return response;
   }
 
-  Future<dynamic> getComplaints(userId) async {
-    var response = await crud.getData(AppLink.complaintView, {
-      "user_id": userId,
+  Future<dynamic> getComplaints(String userId) async {
+    var response = await crud.postData(AppLink.complaintView, {
+      "user_id": userId, // تأكد أن `userId` يتم تمريره كـ String
     });
     return response.fold((l) => l, (r) => r);
   }
