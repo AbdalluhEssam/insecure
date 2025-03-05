@@ -36,4 +36,17 @@ class HomeData {
     });
     return response.fold((l) => l, (r) => r);
   }
+
+  Future<dynamic> getAllComplaints() async {
+    var response = await crud.postData(AppLink.complaintAllView, {});
+    return response.fold((l) => l, (r) => r);
+  }
+
+  Future<dynamic> replayComplaints(complaintReply, complaintId) async {
+    var response = await crud.postData(AppLink.complaintEdit, {
+      "complaint_reply": complaintReply,
+      "complaint_id": complaintId,
+    });
+    return response.fold((l) => l, (r) => r);
+  }
 }

@@ -19,6 +19,7 @@ class AppRoute {
 static const String homeScreen = "/HomeScreen";
 static const String complaintScreen = "/complaintScreen";
 static const String complaintStatus = "/complaintStatus";
+static const String complaintStatusAll = "/complaintStatusAll";
 
 ////////////////////////////// EMPLOYEES ///////////////////////////////
 

@@ -188,6 +188,27 @@ class ComplaintStatusScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                        if (complaint.status != 1)
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(fontSize: 16),
+                              children: [
+                                TextSpan(
+                                  text: 'Replied | ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: complaint.complaintReply,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),

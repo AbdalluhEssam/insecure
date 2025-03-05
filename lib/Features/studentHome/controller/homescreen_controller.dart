@@ -45,13 +45,13 @@ class HomeScreenControllerImp extends HomeScreenController {
     {
       "title": "Browse the complaint",
       "image": AppImageAssets.onBoardingImage1,
-      "route": AppRoute.complaintScreen
+      "route": AppRoute.complaintStatusAll
     },
-    {
-      "title": "Check-out",
-      "image": AppImageAssets.onBoardingImage2,
-      "route": AppRoute.complaintStatus
-    },
+    // {
+    //   "title": "Check-out",
+    //   "image": AppImageAssets.onBoardingImage2,
+    //   "route": AppRoute.complaintStatus
+    // },
   ];
 
   // المتغيرات لحفظ حالة الإشعارات والتحديثات

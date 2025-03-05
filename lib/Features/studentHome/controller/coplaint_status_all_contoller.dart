@@ -9,15 +9,16 @@ import '../../../core/class/statusrequest.dart';
 import '../../../core/services/services.dart';
 import '../data/data_source/home_data.dart';
 import '../data/model/complain_model.dart';
+import 'package:flutter/material.dart';
 
-class ComplaintStatusController extends GetxController {
+class ComplaintStatusAllController extends GetxController {
   HomeData homeData = HomeData(Get.find());
 
   late StatusRequest statusRequest;
 
   MyServices myServices = Get.find();
 
-  List<ComplainModel> complaints = [];
+  List<ComplainAllModel> complaints = [];
 
   @override
   void onInit() {
@@ -42,7 +43,7 @@ class ComplaintStatusController extends GetxController {
       statusRequest = StatusRequest.loading;
       update(); // تحديث الواجهة لعرض حالة التحميل
 
-      var response = await homeData.getComplaints(userModel.userId.toString());
+      var response = await homeData.getAllComplaints();
 
       log("=================== response =================== ${response.toString()}");
 
@@ -53,7 +54,7 @@ class ComplaintStatusController extends GetxController {
         statusRequest = StatusRequest.success;
         List data = response['data'] as List;
 
-        complaints.addAll(data.map((e) => ComplainModel.fromJson(e)));
+        complaints.addAll(data.map((e) => ComplainAllModel.fromJson(e)));
 
         update();
       } else {
@@ -66,6 +67,41 @@ class ComplaintStatusController extends GetxController {
       update(); // تحديث الواجهة لعرض حالة التحميل
     } finally {
       update();
+    }
+  }
+
+  TextEditingController complaintReply = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  void replayComplaints(String complaintId) async {
+    if (formKey.currentState!.validate()) {
+      try {
+        statusRequest = StatusRequest.loading;
+        update(); // تحديث الواجهة لعرض حالة التحميل
+
+        var response =
+            await homeData.replayComplaints(complaintReply.text, complaintId);
+
+        log("=================== response =================== ${response.toString()}");
+
+        statusRequest = handlingData(response);
+
+        if (statusRequest == StatusRequest.success &&
+            response['status'] == "success") {
+          statusRequest = StatusRequest.success;
+          fetchComplaints();
+
+          update();
+        } else {
+          statusRequest = StatusRequest.failure;
+          update(); // تحديث الواجهة لعرض حالة التحميل
+        }
+      } catch (e) {
+        log("Error fetching complaints: $e");
+        statusRequest = StatusRequest.failure;
+        update(); // تحديث الواجهة لعرض حالة التحميل
+      } finally {
+        update();
+      }
     }
   }
 }

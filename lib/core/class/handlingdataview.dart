@@ -61,8 +61,6 @@ class HandlingDataRequest extends StatelessWidget {
                               Lottie.asset(AppImageAssets.emptyDo),
                               const SizedBox(height: 20),
                               const Text("لم يتم العثور على بيانات."),
-                              const SizedBox(height: 20),
-                              _retryButton(),
                             ],
                           ),
                         ),
