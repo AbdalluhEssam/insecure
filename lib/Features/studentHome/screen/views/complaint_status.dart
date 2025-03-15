@@ -71,123 +71,33 @@ class ComplaintStatusScreen extends StatelessWidget {
                         Text('Type | ${complaint.typeName}',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Status | ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          Colors.black, // اللون الأسود دائمًا
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: complaint.status == 1
-                                        ? 'Under Review'
-                                        : 'Replied',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: complaint.status == 1
-                                          ? AppColor.primaryColor
-                                          : Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                foregroundColor: Colors.black,
-                                elevation: 0,
-                                shadowColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  side: BorderSide(
-                                      color: Colors.black, width: 1.5),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Status | ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Colors.black, // اللون الأسود دائمًا
                                 ),
                               ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => Dialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'View complaint content',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(Icons.close,
-                                                    color: Colors.red),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            complaint.complaintContent
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(height: 20),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    AppColor.primaryColor,
-                                                foregroundColor: Colors.white,
-                                              ),
-                                              icon: Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                              ),
-                                              label: Text('تم'),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'Complaint content',
+                              TextSpan(
+                                text: complaint.status == 1
+                                    ? 'Under Review'
+                                    : 'Replied',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                  color: complaint.status == 1
+                                      ? AppColor.primaryColor
+                                      : Colors.green,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 8),
+
                         if (complaint.status != 1)
                           RichText(
                             text: TextSpan(
@@ -209,6 +119,99 @@ class ComplaintStatusScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                        SizedBox(height: 12),
+
+                        Align(
+                          alignment: Alignment.center,
+                          child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.black,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                  color: Colors.black, width: 1.5),
+                            ),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'View complaint content',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.close,
+                                                color: Colors.red),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      Divider(),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        complaint.complaintContent
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                            AppColor.primaryColor,
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          icon: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                          ),
+                                          label: Text('تم'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Complaint content',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),),
                       ],
                     ),
                   ),
